@@ -1,9 +1,9 @@
 #ifndef STORE_HPP
 #define STORE_HPP
-#include <iostream>
 #include <fstream>
-#include <bit>
 #include <future>
+#include <vector>
+//块状链表
 using std::string;
 using std::fstream;
 using std::ifstream;
@@ -12,11 +12,9 @@ template<class T>
 class nodeHead;
 template<class T, int info_len = 2>
 class MemoryRiver {
-private:
-    /* your code here */
+public:
     fstream file;
     string file_name;
-public:
     MemoryRiver() = default;
 
     MemoryRiver(const string& file_name) : file_name(file_name) {
@@ -30,7 +28,7 @@ public:
     }
     void initialise(string FN = "") {
         if (FN != "") file_name = FN;
-        file.open(file_name, std::ios::in);
+        file.open(file_name, std::ios::out);
         int tmp = 0;
         for (int i = 0; i < info_len; ++i)
             file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
@@ -111,7 +109,7 @@ public:
 template<class T>
 class block_operator {
 public:
-    block_operator(string head_name,string body_name,T data_max,T data_min){
+    void initialize(string head_name,string body_name,T data_max,T data_min) {
         head_memory_river.file_name = head_name;
         block_memory_river.file_name = body_name;
         head_memory_river.open();
@@ -125,6 +123,37 @@ public:
             begin.head_pos = head_memory_river.write(begin);
             begin.head_num = 0;
             begin.next_num = 1;
+            begin.block_pos = 8;
+            nodeHead<T> end;
+            end.head_pos = 8 + sizeof(nodeHead<T>);
+            end.head_num = 1;
+            begin.next_num = 1;
+            head_memory_river.write(end);
+            begin.next_num = end.head_num;
+            head_memory_river.update(begin,8);
+        }
+        if(!b) {
+            block_memory_river.initialise(body_name);
+            block<T> begin;
+            block_memory_river.write(begin);
+        }
+        head_memory_river.get_info(block_cnt,1);
+        head_memory_river.ReadAll(all,block_cnt);
+    }//初始化块状链表（输入表头，主体名，数据的最大最小值）
+    block_operator(){}
+    block_operator(string head_name,string body_name,T data_max,T data_min){
+        head_memory_river.file_name = head_name;
+        block_memory_river.file_name = body_name;
+        head_memory_river.open();
+        block_memory_river.open();
+        ifstream h(head_name);
+        ifstream b(body_name);
+        if(!h) {
+            head_memory_river.initialise(head_name);
+            head_memory_river.write_info(2,1);
+            nodeHead<T> begin(data_max,data_min);
+            begin.head_pos = head_memory_river.write(begin);
+            begin.head_num = 0;
             begin.block_pos = 8;
             nodeHead<T> end;
             end.head_pos = 8 + sizeof(nodeHead<T>);
@@ -206,10 +235,10 @@ public:
         }else {
             block_memory_river.update(now,all[num].block_pos);
         }
-    }
+    }//插入元素
     bool find(T &a) {
         int num = 0;
-        T &Max = all[num].data_max,&Min = all[num].data_min;
+        T Max = all[num].data_max,Min = all[num].data_min;
         while(num != 1) {
             if(Max >= a && Min <= a) {
                 break;
@@ -244,7 +273,11 @@ public:
             block_memory_river.read(now,all[num].block_pos);
         }
         return false;
-    }
+    }//找到返回true，并补全a
+    void update(T &a) {
+        Delete(a);
+        insert(a);
+    }//更新数据
     void Delete(T &a){
         int num = 0;
         while (num != 1) {
@@ -265,7 +298,8 @@ public:
             }
         }
         if(now.data[l] == a) {
-            now.data[l] = 0;
+            T zero{};
+            now.data[l] = zero;
             for(int i = l;i < now.data_cnt;++i) {
                 now.data[i] = now.data[i + 1];
             }
@@ -274,12 +308,52 @@ public:
         }else {
             return;
         }
-    }
+    }//删除数据
+    bool find_all(T &a,std::vector<T> &res) {
+        int num = 0;
+        T Max = all[num].data_max,Min = all[num].data_min;
+        while(num != 1) {
+            if(Max >= a && Min <= a) {
+                break;
+            }
+            num = all[num].next_num;
+            Max = all[num].data_max;
+            Min = all[num].data_min;
+        }
+        int cnt = 0;
+        block<T> now;
+        block_memory_river.read(now,all[num].block_pos);
+        while(Max >= a && Min <= a && num != 1) {
+            if(now.data_cnt == 0) {
+                num = all[num].next_num;
+                block_memory_river.read(now,all[num].block_pos);
+                continue;
+            }
+            int l = 0,r = now.data_cnt;
+            while(l < r) {
+                int mid = (l + r) / 2;
+                if(now.data[mid] < a) {
+                    l = mid + 1;
+                }else {
+                    r = mid;
+                }
+            }
+            while(now.data[l] == a && l < now.data_cnt) {
+                res.push_back(now.data[l++]);
+                cnt++;
+            }
+            num = all[num].next_num;
+            block_memory_river.read(now,all[num].block_pos);
+        }
+        if(cnt == 0) {
+            return false;
+        }
+        return true;
+    }//如果找到，返回true，将数据存在vector
 private:
     int block_cnt = 0;
     MemoryRiver<block<T>> block_memory_river;
     MemoryRiver<nodeHead<T>> head_memory_river;
     nodeHead<T> all[6000]{};
 };
-
 #endif //STORE_HPP
