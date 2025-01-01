@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 
 #include "book_manager.h"
@@ -10,6 +11,7 @@ int main() {
   entry_stack stack;
   Scanner scanner;
   BookManager book_manager;
+  std::cout << std::fixed << std::setprecision(2);
   while(!std::cin.eof()) {
     try {
       std::getline(std::cin,line);
@@ -105,4 +107,5 @@ int main() {
       std::cout << "Invalid\n";
     }
   }
+  return 0;
 }

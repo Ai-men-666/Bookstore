@@ -118,6 +118,7 @@ void BookManager::show(Scanner &scanner) {
     for(int i = 0;i < res.size();i++) {
       std::cout << res[i];
     }
+    return;
   }
   string line = scanner.next();
   string option = get_option(line);
