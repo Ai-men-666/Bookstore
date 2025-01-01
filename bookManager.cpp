@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cstring>
 #include <ranges>
+
+#include "finance.h"
 ISBN_to_id ISBN_MAX("~~~~~~~~~~~~~~~~~~~~");
 ISBN_to_id ISBN_MIN{};
 name_to_id name_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -20,6 +22,7 @@ bool cmp(book &a,book &b) {
   return stra < strb;
 }
 extern char select_book[];
+extern finance finance_recorder;
 BookManager::BookManager() {
   ISBN_finder.initialize("ISBN_finder_head","ISBN_finder_body",ISBN_MAX,ISBN_MIN);
   name_finder.initialize("name_finder_head","name_finder_body",name_MAX,name_MIN);
@@ -178,7 +181,11 @@ void BookManager::buy(Scanner &scanner) {
     throw 0;
   }
   std::cout << quantity * tmp.price;
+  tmp.total_cost += quantity * tmp.price;
   book_finder.update(tmp);
+  deal d;
+  d.income = quantity * tmp.price;
+  finance_recorder.add_deal(d);
 }
 void BookManager::import(Scanner &scanner) {
   if(select_book[0] == -1) {
@@ -191,15 +198,12 @@ void BookManager::import(Scanner &scanner) {
   }
   string ISBN(select_book);
   book tmp;
-  if(ISBN_find(ISBN,tmp)) {
-    tmp.total_cost += total_cost;
-    tmp.quantity += quantity;
-    book_finder.update(tmp);
-  }else {
-    tmp.total_cost = total_cost;
-    tmp.quantity = quantity;
-    book_finder.insert(tmp);
-  }
+  tmp.total_cost += total_cost;
+  tmp.quantity += quantity;
+  book_finder.update(tmp);
+  deal d;
+  d.outcome = total_cost;
+  finance_recorder.add_deal(d);
 }
 void BookManager::modify(Scanner &scanner) {
   if(select_book[0] == -1) {

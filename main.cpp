@@ -1,10 +1,11 @@
 #include <iomanip>
 #include <iostream>
-
 #include "book_manager.h"
 #include "scanner.h"
 #include "entrystack.hpp"
+#include "finance.h"
 char select_book[20]{};
+finance finance_recorder{};
 int main() {
   string line;
   string order;
@@ -75,7 +76,12 @@ int main() {
         continue;
       }
       if(order == "show") {
-        book_manager.show(scanner);
+        Scanner scanner_ = scanner;
+        if(scanner_.next() == "finance") {
+          finance_recorder.show(scanner_);
+        }else {
+          book_manager.show(scanner);
+        }
         if(!scanner.is_empty()) {
           throw 0;
         }
