@@ -2,27 +2,27 @@
 #include <cstring>
 #include <string>
 bool operator < (book &a,book &b) {
-  std::string stra(a.ISBN),strb(b.ISBN);
-  return stra < strb;
+  return a.id < b.id;
 }
 bool operator > (book &a,book &b) {
-  std::string stra(a.ISBN),strb(b.ISBN);
-  return stra > strb;
+  return a.id > b.id;
 }
 bool operator >=(book &a,book &b) {
-  std::string stra(a.ISBN),strb(b.ISBN);
-  return stra >= strb;
+  return a.id >= b.id;
 }
 bool operator <=(book &a,book &b) {
-  std::string stra(a.ISBN),strb(b.ISBN);
-  return stra <= strb;
+  return a.id <= b.id;
 }
 bool operator ==(book &a,book &b) {
-  std::string stra(a.ISBN),strb(b.ISBN);
-  return stra == strb;
+  return a.id == b.id;
 }
 book::book(int i) :id(i){}
 book::book(){}
+book::book(std::string&a) {
+  for(int i = 0;i < a.length();i++) {
+    ISBN[i] = a[i];
+  }
+}
 ISBN_to_id::ISBN_to_id(std::string a) {
   for(int i = 0;i < a.length();i++) {
     ISBN[i] = a[i];
@@ -224,3 +224,51 @@ bool operator ==(keyword_to_id &a,keyword_to_id &b) {
   }
   return true;
 }
+book &book::operator++() {
+  id++;
+  return *this;
+}
+ISBN_to_id &ISBN_to_id::operator++() {
+  int i = 19;
+  for(;i >= 0;i--) {
+    if(ISBN[i] != 0) {
+      break;
+    }
+  }
+  ISBN[i]++;
+  return *this;
+}
+name_to_id &name_to_id::operator++() {
+  int i = 59;
+  for(;i >= 0;i--) {
+    if(name[i] != 0) {
+      break;
+    }
+  }
+  name[i]++;
+  return *this;
+}
+author_to_id &author_to_id::operator++() {
+  int i = 59;
+  for(;i >= 0;i--) {
+    if(author[i] != 0) {
+      break;
+    }
+  }
+  author[i]++;
+  return *this;
+}
+keyword_to_id &keyword_to_id::operator++() {
+  int i = 59;
+  for(;i >= 0;i--) {
+    if(keyword[i] != 0) {
+      break;
+    }
+  }
+  keyword[i]++;
+  return *this;
+}
+ISBN_to_id::ISBN_to_id(int id) :id(id) {}
+name_to_id::name_to_id(int id):id(id) {}
+author_to_id::author_to_id(int id):id(id) {}
+keyword_to_id::keyword_to_id(int id):id(id) {}

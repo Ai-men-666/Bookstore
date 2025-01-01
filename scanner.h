@@ -69,7 +69,7 @@ inline int to_int(string a) {
   }
   return sum;
 }
-string get_option(string&a) {
+inline string get_option(string&a) {
   string tmp;
   while(a[0] != '=' && a.length() > 0) {
     tmp += a[0];

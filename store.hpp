@@ -350,6 +350,12 @@ public:
         }
         return true;
     }//如果找到，返回true，将数据存在vector
+    void write_info(int a,int pos) {
+        block_memory_river.write_info(a,pos);
+    }
+    void get_info(int &a,int pos) {
+        block_memory_river.get_info(a,pos);
+    }
 private:
     int block_cnt = 0;
     MemoryRiver<block<T>> block_memory_river;

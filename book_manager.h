@@ -19,6 +19,9 @@ public:
   void buy(Scanner&scanner);
   void modify(Scanner&scanner);
   void import(Scanner&scanner);
+  void select(Scanner&scanner);
+  int get_book_id();
+  void add_book_id();
 };
 
 #endif //BOOK_MANAGER_H

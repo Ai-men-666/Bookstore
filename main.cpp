@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "book_manager.h"
 #include "scanner.h"
 #include "entrystack.hpp"
 char select_book[20]{};
@@ -7,6 +9,7 @@ int main() {
   string order;
   entry_stack stack;
   Scanner scanner;
+  BookManager book_manager;
   while(!std::cin.eof()) {
     try {
       std::getline(std::cin,line);
@@ -62,8 +65,41 @@ int main() {
         }
         continue;
       }
-
-
+      if(order == "select") {
+        book_manager.select(scanner);
+        if(!scanner.is_empty()) {
+          throw 0;
+        }
+        continue;
+      }
+      if(order == "show") {
+        book_manager.show(scanner);
+        if(!scanner.is_empty()) {
+          throw 0;
+        }
+        continue;
+      }
+      if(order == "buy") {
+        book_manager.buy(scanner);
+        if(!scanner.is_empty()) {
+          throw 0;
+        }
+        continue;
+      }
+      if(order == "modify") {
+        book_manager.modify(scanner);
+        if(!scanner.is_empty()) {
+          throw 0;
+        }
+        continue;
+      }
+      if(order == "import") {
+        book_manager.import(scanner);
+        if(!scanner.is_empty()) {
+          throw 0;
+        }
+        continue;
+      }
       throw 0;
     }catch (...) {
       std::cout << "Invalid\n";
