@@ -265,7 +265,7 @@ public:
                     r = mid;
                 }
             }
-            if(now.data[l] == a) {
+            if(now.data[l] >= a && now.data[l] <= a) {
                 a = now.data[l];
                 return true;
             }
@@ -338,7 +338,7 @@ public:
                     r = mid;
                 }
             }
-            while(now.data[l] == a && l < now.data_cnt) {
+            while(now.data[l] >= a && now.data[l] <= a && l < now.data_cnt) {
                 res.push_back(now.data[l++]);
                 cnt++;
             }

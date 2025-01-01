@@ -74,7 +74,7 @@ bool operator ==(ISBN_to_id &a,ISBN_to_id &b) {
   if(stra.length() == 0 && strb.length() == 0) {
     return a.id == b.id;
   }
-  return stra == strb;
+  return stra == strb && a.id == b.id;
 }
 name_to_id::name_to_id(std::string a) {
   for(int i = 0;i < a.length();i++) {
@@ -119,7 +119,7 @@ bool operator ==(name_to_id &a,name_to_id &b) {
   if(stra.length() == 0 && strb.length() == 0) {
     return a.id == b.id;
   }
-  return stra == strb;
+  return stra == strb && a.id == b.id;
 }
 author_to_id::author_to_id(std::string a) {
   for(int i = 0;i < a.length();i++) {
@@ -164,7 +164,7 @@ bool operator ==(author_to_id &a,author_to_id &b) {
   if(stra.length() == 0 && strb.length() == 0) {
     return a.id == b.id;
   }
-  return stra == strb;
+  return stra == strb && a.id == b.id;
 }
 keyword_to_id::keyword_to_id(std::string a) {
   for(int i = 0;i < a.length();i++) {
@@ -209,7 +209,7 @@ bool operator ==(keyword_to_id &a,keyword_to_id &b) {
   if(stra.length() == 0 && strb.length() == 0) {
     return a.id == b.id;
   }
-  return stra == strb;
+  return stra == strb && a.id == b.id;
 }
 book &book::operator++() {
   id++;

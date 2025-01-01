@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstring>
+#include <ranges>
 ISBN_to_id ISBN_MAX("~~~~~~~~~~~~~~~~~~~~");
 ISBN_to_id ISBN_MIN{};
 name_to_id name_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -25,6 +26,7 @@ BookManager::BookManager() {
   author_finder.initialize("author_finder_head","author_finder_body",author_MAX,author_MIN);
   key_word_finder.initialize("key_word_finder_head","key_word_finder_body",keyword_MAX,keyword_MIN);
   book_finder.initialize("book_finder_head","book_finder_body",book_MAX,book_MIN);
+  book_finder.write_info(1,1);
 }
 int BookManager::get_book_id() {
   int a = 0;
@@ -83,7 +85,7 @@ bool BookManager::name_find(string &name, std::vector<book> &res) {
 bool BookManager::author_find(string &author, std::vector<book> &res) {
   author_to_id tmp_author(author);
   std::vector<author_to_id> all_id;
-  if(!author_finder.find(tmp_author)) {
+  if(!author_finder.find_all(tmp_author,all_id)) {
     return false;
   }
   for(int i = 0;i < all_id.size();i++) {
@@ -97,7 +99,7 @@ bool BookManager::author_find(string &author, std::vector<book> &res) {
 bool BookManager::keyword_find(string &keyword, std::vector<book> &res) {
   keyword_to_id tmp_keyword(keyword);
   std::vector<keyword_to_id> all_id;
-  if(!key_word_finder.find(tmp_keyword)) {
+  if(!key_word_finder.find_all(tmp_keyword,all_id)) {
     return false;
   }
   for(int i = 0;i < all_id.size();i++) {
@@ -109,6 +111,14 @@ bool BookManager::keyword_find(string &keyword, std::vector<book> &res) {
   return true;
 }
 void BookManager::show(Scanner &scanner) {
+  if(scanner.is_empty()) {
+    std::vector<book> res;
+    book_finder.list(res);
+    std::sort(res.begin(),res.end(),cmp);
+    for(int i = 0;i < res.size();i++) {
+      std::cout << res[i];
+    }
+  }
   string line = scanner.next();
   string option = get_option(line);
   book tmp;
@@ -210,6 +220,10 @@ void BookManager::modify(Scanner &scanner) {
       ISBN_finder.Delete(old_ISBN);
       ISBN_finder.insert(new_ISBN);
       book_finder.update(tmp);
+      memset(select_book,0,20);
+      for(int i = 0;i < line.length();i++) {
+        select_book[i] = line[i];
+      }
       continue;
     }
     if(option == "-name") {
@@ -252,14 +266,28 @@ void BookManager::modify(Scanner &scanner) {
       string ISBN_old(select_book);
       ISBN_find(ISBN_old,tmp);
       string old_keyword(tmp.keyword);
-      keyword_to_id old_id(old_keyword,tmp.id);
       memset(tmp.keyword,0,60);
+      while(!old_keyword.empty()) {
+        string keyword = get_keyword(old_keyword);
+        keyword_to_id old(keyword,tmp.id);
+        key_word_finder.Delete(old);
+      }
       for(int i = 0;i < line.length();i++) {
         tmp.keyword[i] = line[i];
       }
-      keyword_to_id new_id(line,tmp.id);
-      key_word_finder.Delete(old_id);
-      key_word_finder.insert(new_id);
+      while(!line.empty()) {
+        string keyword = get_keyword(line);
+        keyword_to_id New(keyword,tmp.id);
+        key_word_finder.insert(New);
+      }
+      book_finder.update(tmp);
+      continue;
+    }
+    if(option == "-price") {
+      double price = std::stod(line);
+      string ISBN_old(select_book);
+      ISBN_find(ISBN_old,tmp);
+      tmp.price = price;
       book_finder.update(tmp);
       continue;
     }
