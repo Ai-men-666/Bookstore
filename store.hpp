@@ -356,6 +356,17 @@ public:
     void get_info(int &a,int pos) {
         block_memory_river.get_info(a,pos);
     }
+    void list(std::vector<T> &res) {
+        int num = 0;
+        while(num != 1) {
+            block<T> now;
+            block_memory_river.read(now,all[num].block_pos);
+            for(int i = 0;i < now.data_cnt;i++) {
+                res.push_back(now.data[i]);
+            }
+            num = all[num].next_num;
+        }
+    }//将所有数据存到res
 private:
     int block_cnt = 0;
     MemoryRiver<block<T>> block_memory_river;
