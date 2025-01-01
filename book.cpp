@@ -1,6 +1,7 @@
 #include "book.h"
-#include <cstring>
+#include <iomanip>
 #include <string>
+#include <iostream>
 bool operator < (book &a,book &b) {
   return a.id < b.id;
 }
@@ -29,23 +30,9 @@ ISBN_to_id::ISBN_to_id(std::string a) {
   }
 }
 std::ostream &operator<<(std::ostream &os, const book &a) {
-  for(int i = 0;i < strlen(a.ISBN);i++) {
-    os << a.ISBN[i];
-  }
-  os << '\t';
-  for(int i = 0;i < strlen(a.name);i++) {
-    os << a.name[i];
-  }
-  os << '\t';
-  for(int i = 0;i < strlen(a.author);i++) {
-    os << a.author[i];
-  }
-  os << '\t';
-  for(int i = 0;i < strlen(a.keyword);i++) {
-    os << a.keyword[i];
-  }
-  os << '\t';
-  os << a.price << '\t' << a.quantity << '\n';
+  os << a.ISBN << '\t' << a.name << '\t' << a.author << '\t'
+  << a.keyword << '\t' << std::fixed << std::setprecision(2) << a.price << '\t'
+  << a.quantity << '\n';
   return os;
 }
 
@@ -56,22 +43,37 @@ ISBN_to_id::ISBN_to_id(std::string &a, int id):ISBN_to_id(a) {
 
 bool operator < (ISBN_to_id &a,ISBN_to_id &b) {
   std::string stra(a.ISBN),strb(b.ISBN);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id < b.id;
+  }
   return stra < strb;
 }
 bool operator > (ISBN_to_id &a,ISBN_to_id &b) {
   std::string stra(a.ISBN),strb(b.ISBN);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id > b.id;
+  }
   return stra > strb;
 }
 bool operator >=(ISBN_to_id &a,ISBN_to_id &b) {
   std::string stra(a.ISBN),strb(b.ISBN);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id >= b.id;
+  }
   return stra >= strb;
 }
 bool operator <=(ISBN_to_id &a,ISBN_to_id &b) {
   std::string stra(a.ISBN),strb(b.ISBN);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id <= b.id;
+  }
   return stra <= strb;
 }
 bool operator ==(ISBN_to_id &a,ISBN_to_id &b) {
   std::string stra(a.ISBN),strb(b.ISBN);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id == b.id;
+  }
   return stra == strb;
 }
 name_to_id::name_to_id(std::string a) {
@@ -85,44 +87,39 @@ name_to_id::name_to_id(std::string &a, int id):name_to_id(a) {
 }
 
 bool operator < (name_to_id &a,name_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.name[i] != b.name[i]) {
-      return a.name[i] < b.name[i];
-    }
+  std::string stra(a.name),strb(b.name);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id < b.id;
   }
-  return false;
+  return stra < strb;
 }
 bool operator > (name_to_id &a,name_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.name[i] != b.name[i]) {
-      return a.name[i] > b.name[i];
-    }
+  std::string stra(a.name),strb(b.name);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id > b.id;
   }
-  return false;
+  return stra > strb;
 }
 bool operator >=(name_to_id &a,name_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.name[i] != b.name[i]) {
-      return a.name[i] > b.name[i];
-    }
+  std::string stra(a.name),strb(b.name);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id >= b.id;
   }
-  return true;
+  return stra >= strb;
 }
 bool operator <=(name_to_id &a,name_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.name[i] != b.name[i]) {
-      return a.name[i] < b.name[i];
-    }
+  std::string stra(a.name),strb(b.name);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id <= b.id;
   }
-  return true;
+  return stra <= strb;
 }
 bool operator ==(name_to_id &a,name_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.name[i] != b.name[i]) {
-      return false;
-    }
+  std::string stra(a.name),strb(b.name);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id == b.id;
   }
-  return true;
+  return stra == strb;
 }
 author_to_id::author_to_id(std::string a) {
   for(int i = 0;i < a.length();i++) {
@@ -135,44 +132,39 @@ author_to_id::author_to_id(std::string &a, int id):author_to_id(a) {
 }
 
 bool operator < (author_to_id &a,author_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.author[i] != b.author[i]) {
-      return a.author[i] < b.author[i];
-    }
+  std::string stra(a.author),strb(b.author);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id < b.id;
   }
-  return false;
+  return stra < strb;
 }
 bool operator > (author_to_id &a,author_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.author[i] != b.author[i]) {
-      return a.author[i] > b.author[i];
-    }
+  std::string stra(a.author),strb(b.author);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id > b.id;
   }
-  return false;
+  return stra > strb;
 }
 bool operator >=(author_to_id &a,author_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.author[i] != b.author[i]) {
-      return a.author[i] > b.author[i];
-    }
+  std::string stra(a.author),strb(b.author);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id >= b.id;
   }
-  return true;
+  return stra >= strb;
 }
 bool operator <=(author_to_id &a,author_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.author[i] != b.author[i]) {
-      return a.author[i] < b.author[i];
-    }
+  std::string stra(a.author),strb(b.author);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id <= b.id;
   }
-  return true;
+  return stra <= strb;
 }
 bool operator ==(author_to_id &a,author_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.author[i] != b.author[i]) {
-      return false;
-    }
+  std::string stra(a.author),strb(b.author);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id == b.id;
   }
-  return true;
+  return stra == strb;
 }
 keyword_to_id::keyword_to_id(std::string a) {
   for(int i = 0;i < a.length();i++) {
@@ -185,44 +177,39 @@ keyword_to_id::keyword_to_id(std::string &a, int id):keyword_to_id(a) {
 }
 
 bool operator < (keyword_to_id &a,keyword_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.keyword[i] != b.keyword[i]) {
-      return a.keyword[i] < b.keyword[i];
-    }
+  std::string stra(a.keyword),strb(b.keyword);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id < b.id;
   }
-  return false;
+  return stra < strb;
 }
 bool operator > (keyword_to_id &a,keyword_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.keyword[i] != b.keyword[i]) {
-      return a.keyword[i] > b.keyword[i];
-    }
+  std::string stra(a.keyword),strb(b.keyword);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id > b.id;
   }
-  return false;
+  return stra > strb;
 }
 bool operator >=(keyword_to_id &a,keyword_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.keyword[i] != b.keyword[i]) {
-      return a.keyword[i] > b.keyword[i];
-    }
+  std::string stra(a.keyword),strb(b.keyword);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id >= b.id;
   }
-  return true;
+  return stra >= strb;
 }
 bool operator <=(keyword_to_id &a,keyword_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.keyword[i] != b.keyword[i]) {
-      return a.keyword[i] < b.keyword[i];
-    }
+  std::string stra(a.keyword),strb(b.keyword);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id <= b.id;
   }
-  return true;
+  return stra <= strb;
 }
 bool operator ==(keyword_to_id &a,keyword_to_id &b) {
-  for(int i = 0;i < 60;i++) {
-    if(a.keyword[i] != b.keyword[i]) {
-      return false;
-    }
+  std::string stra(a.keyword),strb(b.keyword);
+  if(stra.length() == 0 && strb.length() == 0) {
+    return a.id == b.id;
   }
-  return true;
+  return stra == strb;
 }
 book &book::operator++() {
   id++;
