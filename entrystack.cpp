@@ -56,6 +56,9 @@ void entry_stack::create_account(Scanner &scanner) {
     throw 0;
   }
   string name = scanner.next();
+  if(!scanner.is_empty()) {
+    throw 0;
+  }
   account_manager_.create(id,pd,privilege,name);
 }
 void entry_stack::delete_account(Scanner &scanner) {
@@ -63,6 +66,9 @@ void entry_stack::delete_account(Scanner &scanner) {
     throw 0;
   }
   string id = scanner.next();
+  if(!scanner.is_empty()) {
+    throw 0;
+  }
   account tmp(id);
   auto it = std::find(stack.begin(),stack.end(),tmp);
   if(it != stack.end()) {
@@ -77,6 +83,9 @@ void entry_stack::register_account(Scanner &scanner) {
   string id = scanner.next();
   string pd = scanner.next();
   string name = scanner.next();
+  if(!scanner.is_empty()) {
+    throw 0;
+  }
   account_manager_.Register(id,pd,name);
 }
 void entry_stack::change_user_password(Scanner &scanner) {
@@ -94,6 +103,9 @@ void entry_stack::change_user_password(Scanner &scanner) {
     return;
   }
   new_pd = scanner.next();
+  if(!scanner.is_empty()) {
+    throw 0;
+  }
   account_manager_.change_passwd(id,pd,new_pd);
 }
 
