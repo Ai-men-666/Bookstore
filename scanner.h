@@ -80,4 +80,12 @@ inline string get_option(string&a) {
   }
   return tmp;
 }
+inline string get_keyword(string &a) {
+  string tmp;
+  while(a[0] != '|' && !a.empty()) {
+    tmp += a[0];
+    a.erase(0,1);
+  }
+  return tmp;
+}
 #endif //SCANNER_H
