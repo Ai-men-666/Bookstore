@@ -86,6 +86,9 @@ inline string get_keyword(string &a) {
     tmp += a[0];
     a.erase(0,1);
   }
+  if(a[0] == '|') {
+    a.erase(0,1);
+  }
   return tmp;
 }
 #endif //SCANNER_H
