@@ -19,6 +19,9 @@ int main() {
     try {
       std::getline(std::cin,line);
       scanner.initialise(line);
+      if(scanner.is_empty()) {
+        continue;
+      }
       order = scanner.next();
       if(order == "exit") {
         return 0;
