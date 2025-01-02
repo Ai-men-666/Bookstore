@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "../code"
+  "../code.pdb"
   "CMakeFiles/code.dir/account.cpp.o"
   "CMakeFiles/code.dir/account.cpp.o.d"
   "CMakeFiles/code.dir/account_manager.cpp.o"
@@ -13,8 +15,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/code.dir/finance.cpp.o.d"
   "CMakeFiles/code.dir/main.cpp.o"
   "CMakeFiles/code.dir/main.cpp.o.d"
-  "cmake-build-debug/code"
-  "cmake-build-debug/code.pdb"
 )
 
 # Per-language clean rules from dependency scanning.
