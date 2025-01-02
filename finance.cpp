@@ -30,6 +30,7 @@ deal &operator++(deal &a) {
 
 std::ostream &operator<<(std::ostream &os, deal a) {
   os << "+ " << a.income << " - " << a.outcome << '\n';
+  return os;
 }
 
 finance::finance() {
@@ -40,7 +41,7 @@ finance::finance() {
   deal_min.outcome = 0;
   deal_min.cnt = 0;
   recorder.initialize("finance_head","finance_body",deal_max,deal_min);
-  deal d;
+  deal d{};
   d.cnt = 1;d.income = 0;d.outcome = 0;
   recorder.insert(d);
   update_cnt();
@@ -93,7 +94,7 @@ void finance::show(Scanner &scanner) {
   int sum = get_cnt();
   deal tmp(sum - cnt);
   recorder.find(tmp);
-  deal res;
+  deal res{};
   res.income = last_deal().income - tmp.income;
   res.outcome = last_deal().outcome - tmp.outcome;
   std::cout << res;
