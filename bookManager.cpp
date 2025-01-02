@@ -194,7 +194,7 @@ void BookManager::buy(Scanner &scanner) {
   std::cout << quantity * tmp.price << '\n';
   tmp.total_cost += quantity * tmp.price;
   book_finder.update(tmp);
-  deal d;
+  deal d{};
   d.income = quantity * tmp.price;
   finance_recorder.add_deal(d);
 }
@@ -216,7 +216,7 @@ void BookManager::import(Scanner &scanner) {
   tmp.total_cost += total_cost;
   tmp.quantity += quantity;
   book_finder.update(tmp);
-  deal d;
+  deal d{};
   d.outcome = total_cost;
   finance_recorder.add_deal(d);
 }

@@ -4,8 +4,8 @@
 #include "scanner.h"
 #include "store.hpp"
 struct deal {
-  int cnt;
-  double income,outcome;
+  int cnt{};
+  double income{},outcome{};
   deal();
   deal(int cnt);
   deal(int cnt,int income,int outcome);

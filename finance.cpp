@@ -34,6 +34,10 @@ std::ostream &operator<<(std::ostream &os, deal a) {
 
 finance::finance() {
   deal_max.cnt = INT_MAX;
+  deal_max.income = 0;
+  deal_max.outcome = 0;
+  deal_min.income = 0;
+  deal_min.outcome = 0;
   deal_min.cnt = 0;
   recorder.initialize("finance_head","finance_body",deal_max,deal_min);
   deal d;

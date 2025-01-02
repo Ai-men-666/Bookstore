@@ -6,7 +6,7 @@
 #include "finance.h"
 char select_book[20] = {-1};
 finance finance_recorder{};
-entry_stack stack;
+entry_stack stack{};
 int main() {
   string line;
   string order;
