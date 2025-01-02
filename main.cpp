@@ -4,27 +4,27 @@
 #include "scanner.h"
 #include "entrystack.hpp"
 #include "finance.h"
-char select_book[20]{};
+char select_book[20] = {-1};
 finance finance_recorder{};
+entry_stack stack;
 int main() {
   string line;
   string order;
-  entry_stack stack;
   Scanner scanner;
   BookManager book_manager;
   std::cout << std::fixed << std::setprecision(2);
+  int cnt = 0;
   while(!std::cin.eof()) {
+    cnt++;
     try {
       std::getline(std::cin,line);
       scanner.initialise(line);
       order = scanner.next();
       if(order == "exit") {
-        exit(0);
-        continue;
+        return 0;
       }
       if(order == "quit") {
-        exit(0);
-        continue;
+        return 0;
       }
       if(order == "su") {
         stack.login(scanner);
@@ -77,12 +77,12 @@ int main() {
       }
       if(order == "show") {
         Scanner scanner_ = scanner;
-        if(scanner_.next() == "finance") {
-          finance_recorder.show(scanner_);
-        }else {
+        if(scanner_.is_empty() || scanner_.next() != "finance") {
           book_manager.show(scanner);
+        }else {
+          finance_recorder.show(scanner_);
         }
-        if(!scanner.is_empty()) {
+        if(!(scanner.is_empty() || scanner_.is_empty())) {
           throw 0;
         }
         continue;

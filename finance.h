@@ -1,5 +1,6 @@
 #ifndef FINANCE_H
 #define FINANCE_H
+#include "entrystack.hpp"
 #include "scanner.h"
 #include "store.hpp"
 struct deal {
@@ -15,6 +16,7 @@ bool operator > (deal &a,deal &b);
 bool operator <= (deal &a,deal &b);
 bool operator >= (deal &a,deal &b);
 bool operator == (deal &a,deal &b);
+deal& operator++(deal &a);
 std::ostream& operator<<(std::ostream&,deal);
 class finance {
 public:

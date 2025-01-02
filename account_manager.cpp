@@ -1,6 +1,11 @@
 #include "account_manager.hpp"
 #include <cstring>
 account_manager::account_manager() {
+  account max_account;
+  account min_account{};
+  for(int i = 0;i < 30;i++) {
+    max_account.id[i] = '~';
+  }
   store.initialize("account_head","account_body",max_account,min_account);
   account root("root","sjtu",7,"root");
   if(!store.find(root)) {

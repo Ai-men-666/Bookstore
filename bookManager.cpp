@@ -6,6 +6,7 @@
 #include <cstring>
 #include <ranges>
 
+#include "entrystack.hpp"
 #include "finance.h"
 ISBN_to_id ISBN_MAX("~~~~~~~~~~~~~~~~~~~~");
 ISBN_to_id ISBN_MIN{};
@@ -17,6 +18,7 @@ keyword_to_id keyword_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 keyword_to_id keyword_MIN{};
 book book_MIN(-1);
 book book_MAX(INT_MAX);
+extern entry_stack stack;
 bool cmp(book &a,book &b) {
   string stra(a.ISBN),strb(b.ISBN);
   return stra < strb;
@@ -41,6 +43,9 @@ void BookManager::add_book_id() {
 }
 
 void BookManager::select(Scanner&scanner) {
+  if(stack.cur_account().privilege < 3) {
+    throw 0;
+  }
   memset(select_book,0,20);
   string ISBN = scanner.next();
   for(int i = 0;i < ISBN.length();i++) {
@@ -114,6 +119,9 @@ bool BookManager::keyword_find(string &keyword, std::vector<book> &res) {
   return true;
 }
 void BookManager::show(Scanner &scanner) {
+  if(stack.cur_account().privilege < 1) {
+    throw 0;
+  }
   if(scanner.is_empty()) {
     std::vector<book> res;
     book_finder.list(res);
@@ -170,17 +178,20 @@ void BookManager::show(Scanner &scanner) {
 }
 
 void BookManager::buy(Scanner &scanner) {
+  if(stack.cur_account().privilege < 1) {
+    throw 0;
+  }
   string ISBN = scanner.next();
   int quantity = to_int(scanner.next());
   book tmp;
   if(!ISBN_find(ISBN,tmp)) {
     throw 0;
   }
-  tmp.quantity -= quantity;
-  if(tmp.quantity < 0 || quantity <= 0) {
+  if(tmp.quantity - quantity < 0 || quantity <= 0) {
     throw 0;
   }
-  std::cout << quantity * tmp.price;
+  tmp.quantity -= quantity;
+  std::cout << quantity * tmp.price << '\n';
   tmp.total_cost += quantity * tmp.price;
   book_finder.update(tmp);
   deal d;
@@ -188,6 +199,9 @@ void BookManager::buy(Scanner &scanner) {
   finance_recorder.add_deal(d);
 }
 void BookManager::import(Scanner &scanner) {
+  if(stack.cur_account().privilege < 3) {
+    throw 0;
+  }
   if(select_book[0] == -1) {
     throw 0;
   }
@@ -197,7 +211,8 @@ void BookManager::import(Scanner &scanner) {
     throw 0;
   }
   string ISBN(select_book);
-  book tmp;
+  book tmp(ISBN);
+  ISBN_find(ISBN,tmp);
   tmp.total_cost += total_cost;
   tmp.quantity += quantity;
   book_finder.update(tmp);
@@ -206,6 +221,9 @@ void BookManager::import(Scanner &scanner) {
   finance_recorder.add_deal(d);
 }
 void BookManager::modify(Scanner &scanner) {
+  if(stack.cur_account().privilege < 3) {
+    throw 0;
+  }
   if(select_book[0] == -1) {
     throw 0;
   }
@@ -217,6 +235,9 @@ void BookManager::modify(Scanner &scanner) {
       string ISBN_old(select_book);
       ISBN_find(ISBN_old,tmp);
       memset(tmp.ISBN,0,20);
+      if(ISBN_find(line,tmp)) {
+        throw 0;
+      }
       for(int i = 0;i < line.length();i++) {
         tmp.ISBN[i] = line[i];
       }

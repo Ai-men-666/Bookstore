@@ -3,8 +3,6 @@
 #include "store.hpp"
 #include "scanner.h"
 #include "account.hpp"
-const account max_account("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-const account min_account{};
 class account_manager {
 public:
   account_manager();

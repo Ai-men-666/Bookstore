@@ -24,7 +24,7 @@ public:
         file.close();
     }
     void open() {
-        file.open(file_name);
+        file.open(file_name,std::ios::in|std::ios::out | std::ios::binary);
     }
     void initialise(string FN = "") {
         if (FN != "") file_name = FN;

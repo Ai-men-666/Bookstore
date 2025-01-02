@@ -217,7 +217,7 @@ book &book::operator++() {
 }
 ISBN_to_id &ISBN_to_id::operator++() {
   int i = 19;
-  for(;i >= 0;i--) {
+  for(;i > 0;i--) {
     if(ISBN[i] != 0) {
       break;
     }
@@ -227,7 +227,7 @@ ISBN_to_id &ISBN_to_id::operator++() {
 }
 name_to_id &name_to_id::operator++() {
   int i = 59;
-  for(;i >= 0;i--) {
+  for(;i > 0;i--) {
     if(name[i] != 0) {
       break;
     }
@@ -237,7 +237,7 @@ name_to_id &name_to_id::operator++() {
 }
 author_to_id &author_to_id::operator++() {
   int i = 59;
-  for(;i >= 0;i--) {
+  for(;i > 0;i--) {
     if(author[i] != 0) {
       break;
     }
@@ -247,7 +247,7 @@ author_to_id &author_to_id::operator++() {
 }
 keyword_to_id &keyword_to_id::operator++() {
   int i = 59;
-  for(;i >= 0;i--) {
+  for(;i > 0;i--) {
     if(keyword[i] != 0) {
       break;
     }
