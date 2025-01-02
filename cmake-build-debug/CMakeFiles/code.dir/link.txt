@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/code.dir/main.cpp.o CMakeFiles/code.dir/entrystack.cpp.o CMakeFiles/code.dir/account_manager.cpp.o CMakeFiles/code.dir/book.cpp.o CMakeFiles/code.dir/account.cpp.o CMakeFiles/code.dir/bookManager.cpp.o CMakeFiles/code.dir/finance.cpp.o -o cmake-build-debug/code 

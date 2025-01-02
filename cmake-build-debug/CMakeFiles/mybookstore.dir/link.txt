@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/mybookstore.dir/main.cpp.o CMakeFiles/mybookstore.dir/entrystack.cpp.o CMakeFiles/mybookstore.dir/account_manager.cpp.o CMakeFiles/mybookstore.dir/book.cpp.o CMakeFiles/mybookstore.dir/account.cpp.o -o mybookstore 
