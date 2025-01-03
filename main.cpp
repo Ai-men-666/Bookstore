@@ -4,14 +4,13 @@
 #include "scanner.h"
 #include "entrystack.hpp"
 #include "finance.h"
-char select_book[20] = {-1};
 finance finance_recorder{};
 entry_stack stack{};
+BookManager book_manager;
 int main() {
   string line;
   string order;
   Scanner scanner;
-  BookManager book_manager;
   std::cout << std::fixed << std::setprecision(2);
   int cnt = 0;
   while(!std::cin.eof()) {

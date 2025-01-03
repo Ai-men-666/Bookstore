@@ -8,16 +8,6 @@
 
 #include "entrystack.hpp"
 #include "finance.h"
-ISBN_to_id ISBN_MAX("~~~~~~~~~~~~~~~~~~~~");
-ISBN_to_id ISBN_MIN{};
-name_to_id name_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-name_to_id name_MIN{};
-author_to_id author_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-author_to_id author_MIN{};
-keyword_to_id keyword_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-keyword_to_id keyword_MIN{};
-book book_MIN(-1);
-book book_MAX(INT_MAX);
 extern entry_stack stack;
 bool cmp(book &a,book &b) {
   string stra(a.ISBN),strb(b.ISBN);
@@ -26,6 +16,16 @@ bool cmp(book &a,book &b) {
 extern char select_book[];
 extern finance finance_recorder;
 BookManager::BookManager() {
+  ISBN_to_id ISBN_MAX("~~~~~~~~~~~~~~~~~~~~");
+  ISBN_to_id ISBN_MIN{};
+  name_to_id name_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  name_to_id name_MIN{};
+  author_to_id author_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  author_to_id author_MIN{};
+  keyword_to_id keyword_MAX("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  keyword_to_id keyword_MIN{};
+  book book_MIN(-1);
+  book book_MAX(INT_MAX);
   ISBN_finder.initialize("ISBN_finder_head","ISBN_finder_body",ISBN_MAX,ISBN_MIN);
   name_finder.initialize("name_finder_head","name_finder_body",name_MAX,name_MIN);
   author_finder.initialize("author_finder_head","author_finder_body",author_MAX,author_MIN);
@@ -46,11 +46,9 @@ void BookManager::select(Scanner&scanner) {
   if(stack.cur_account().privilege < 3) {
     throw 0;
   }
-  memset(select_book,0,20);
   string ISBN = scanner.next();
-  for(int i = 0;i < ISBN.length();i++) {
-    select_book[i] = ISBN[i];
-  }
+  book_manager.delete_select_book();
+  book_manager.select_book[stack.cur_account()] = ISBN;
   book tmp;
   if(!ISBN_find(ISBN,tmp)) {
     book tmp_(ISBN);
@@ -202,7 +200,7 @@ void BookManager::import(Scanner &scanner) {
   if(stack.cur_account().privilege < 3) {
     throw 0;
   }
-  if(select_book[0] == -1) {
+  if(cur_select_book() == "") {
     throw 0;
   }
   int quantity = to_int(scanner.next());
@@ -210,7 +208,7 @@ void BookManager::import(Scanner &scanner) {
   if(total_cost < 0) {
     throw 0;
   }
-  string ISBN(select_book);
+  string ISBN(cur_select_book());
   book tmp(ISBN);
   ISBN_find(ISBN,tmp);
   tmp.total_cost += total_cost;
@@ -224,7 +222,7 @@ void BookManager::modify(Scanner &scanner) {
   if(stack.cur_account().privilege < 3) {
     throw 0;
   }
-  if(select_book[0] == -1) {
+  if(cur_select_book() == "") {
     throw 0;
   }
   while(!scanner.is_empty()) {
@@ -232,7 +230,7 @@ void BookManager::modify(Scanner &scanner) {
     string option = get_option(line);
     book tmp;
     if(option == "-ISBN") {
-      string ISBN_old(select_book);
+      string ISBN_old(cur_select_book());
       ISBN_find(ISBN_old,tmp);
       memset(tmp.ISBN,0,20);
       if(ISBN_find(line,tmp)) {
@@ -246,16 +244,16 @@ void BookManager::modify(Scanner &scanner) {
       ISBN_finder.Delete(old_ISBN);
       ISBN_finder.insert(new_ISBN);
       book_finder.update(tmp);
-      memset(select_book,0,20);
-      for(int i = 0;i < line.length();i++) {
-        select_book[i] = line[i];
+      if(cur_select_book() != "") {
+        delete_select_book();
       }
+      select_book[stack.cur_account()] = line;
       continue;
     }
     if(option == "-name") {
       line.erase(0,1);
       line.erase(line.length() - 1,1);
-      string ISBN_old(select_book);
+      string ISBN_old(cur_select_book());
       ISBN_find(ISBN_old,tmp);
       string old_name(tmp.name);
       name_to_id old_id(old_name,tmp.id);
@@ -272,7 +270,7 @@ void BookManager::modify(Scanner &scanner) {
     if(option == "-author") {
       line.erase(0,1);
       line.erase(line.length() - 1,1);
-      string ISBN_old(select_book);
+      string ISBN_old(cur_select_book());
       ISBN_find(ISBN_old,tmp);
       string old_author(tmp.author);
       author_to_id old_id(old_author,tmp.id);
@@ -289,7 +287,7 @@ void BookManager::modify(Scanner &scanner) {
     if(option == "-keyword") {
       line.erase(0,1);
       line.erase(line.length() - 1,1);
-      string ISBN_old(select_book);
+      string ISBN_old(cur_select_book());
       ISBN_find(ISBN_old,tmp);
       string old_keyword(tmp.keyword);
       memset(tmp.keyword,0,60);
@@ -311,7 +309,7 @@ void BookManager::modify(Scanner &scanner) {
     }
     if(option == "-price") {
       double price = std::stod(line);
-      string ISBN_old(select_book);
+      string ISBN_old(cur_select_book());
       ISBN_find(ISBN_old,tmp);
       tmp.price = price;
       book_finder.update(tmp);
@@ -320,4 +318,12 @@ void BookManager::modify(Scanner &scanner) {
     throw 0;
   }
 }
-
+string BookManager::cur_select_book() {
+  if(select_book.find(stack.cur_account()) != select_book.end()) {
+    return select_book[stack.cur_account()];
+  }
+  return "";
+}
+void BookManager::delete_select_book() {
+  select_book.erase(stack.cur_account());
+}

@@ -4,7 +4,9 @@
 #include <string>
 #include "account.hpp"
 #include "account_manager.hpp"
+#include "book_manager.h"
 #include "scanner.h"
+extern BookManager book_manager;
 const int root_rank = 7;
 const int worker_rank = 3;
 const int customer_rank = 1;

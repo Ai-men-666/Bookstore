@@ -1,5 +1,7 @@
 #ifndef BOOK_MANAGER_H
 #define BOOK_MANAGER_H
+#include <map>
+#include "account.hpp"
 #include "book.h"
 #include "store.hpp"
 #include "scanner.h"
@@ -9,6 +11,7 @@ class BookManager {
   block_operator<author_to_id> author_finder;
   block_operator<keyword_to_id> key_word_finder;
   block_operator<book> book_finder;
+  std::map<account,string> select_book;
 public:
   BookManager();
   bool ISBN_find(string&ISBN,book&);
@@ -22,6 +25,8 @@ public:
   void select(Scanner&scanner);
   int get_book_id();
   void add_book_id();
+  string cur_select_book();
+  void delete_select_book();
 };
 
 #endif //BOOK_MANAGER_H

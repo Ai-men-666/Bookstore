@@ -1,7 +1,6 @@
 #include "entrystack.hpp"
-#include <cstring>
 #include <algorithm>
-extern char select_book[];
+extern BookManager book_manager;
 account entry_stack::cur_account() {
   if(stack.empty()) {
     return account();
@@ -32,8 +31,7 @@ void entry_stack::logout() {
   if(cur_account().privilege < 1) {
     throw 0;
   }
-  memset(select_book,0,20);
-  select_book[0] = -1;
+
   if(stack.empty()) {
     throw 0;
   }
