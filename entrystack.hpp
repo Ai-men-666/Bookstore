@@ -12,10 +12,9 @@ const int worker_rank = 3;
 const int customer_rank = 1;
 const int visitor_rank = 0;
 class entry_stack {
-private:
+public:
   std::vector<account> stack;
   account_manager account_manager_;
-public:
   account cur_account();
   void login(Scanner&);
   void logout();

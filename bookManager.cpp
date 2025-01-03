@@ -47,6 +47,7 @@ void BookManager::select(Scanner&scanner) {
     throw 0;
   }
   string ISBN = scanner.next();
+  string old_ISBN = book_manager.cur_select_book();
   book_manager.delete_select_book();
   book_manager.select_book[stack.cur_account()] = ISBN;
   book tmp;
@@ -244,10 +245,11 @@ void BookManager::modify(Scanner &scanner) {
       ISBN_finder.Delete(old_ISBN);
       ISBN_finder.insert(new_ISBN);
       book_finder.update(tmp);
-      if(cur_select_book() != "") {
-        delete_select_book();
+      for(auto &it:select_book) {
+        if(it.second == ISBN_old) {
+          it.second = line;
+        }
       }
-      select_book[stack.cur_account()] = line;
       continue;
     }
     if(option == "-name") {
@@ -335,5 +337,7 @@ string BookManager::cur_select_book() {
   return "";
 }
 void BookManager::delete_select_book() {
-  select_book.erase(stack.cur_account());
+  if(std::find(stack.stack.begin(),stack.stack.end(),stack.cur_account()) == stack.stack.end()) {
+    select_book.erase(stack.cur_account());
+  }
 }
