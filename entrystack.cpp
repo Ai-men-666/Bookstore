@@ -31,7 +31,7 @@ void entry_stack::logout() {
   if(cur_account().privilege < 1) {
     throw 0;
   }
-
+  book_manager.delete_select_book();
   if(stack.empty()) {
     throw 0;
   }

@@ -194,8 +194,11 @@ public:
                 r = mid;
             }
         }
-        if(now.data[l] == a) {
-            return;
+        while(now.data[l] <= a && now.data[l] >= a) {
+            if(now.data[l] == a) {
+                return;
+            }
+            l++;
         }
         if(now.data[now.data_cnt - 1] < a) {
             now.data[now.data_cnt] = a;

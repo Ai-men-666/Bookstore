@@ -20,9 +20,6 @@ account::account(std::string id, std::string pd, int privilege, std::string name
 }
 
 bool operator<(const account &a, const account &b) {
-  if(strlen(a.id) != strlen(b.id)) {
-    return strlen(a.id) < strlen(b.id);
-  }
   for(int i = 0;i < 30;i++) {
     if(a.id[i] != b.id[i]) {
       return a.id[i] < b.id[i];
@@ -31,9 +28,6 @@ bool operator<(const account &a, const account &b) {
   return false;
 }
 bool operator<=(const account &a, const account &b) {
-  if(strlen(a.id) != strlen(b.id)) {
-    return strlen(a.id) < strlen(b.id);
-  }
   for(int i = 0;i < 30;i++) {
     if(a.id[i] != b.id[i]) {
       return a.id[i] < b.id[i];
@@ -42,9 +36,6 @@ bool operator<=(const account &a, const account &b) {
   return true;
 }
 bool operator>(const account &a,const account &b) {
-  if(strlen(a.id) != strlen(b.id)) {
-    return strlen(a.id) > strlen(b.id);
-  }
   for(int i = 0;i < 30;i++) {
     if(a.id[i] != b.id[i]) {
       return a.id[i] > b.id[i];
@@ -53,9 +44,6 @@ bool operator>(const account &a,const account &b) {
   return false;
 }
 bool operator>=(const account &a, const account &b) {
-  if(strlen(a.id) != strlen(b.id)) {
-    return strlen(a.id) > strlen(b.id);
-  }
   for(int i = 0;i < 30;i++) {
     if(a.id[i] != b.id[i]) {
       return a.id[i] > b.id[i];
@@ -64,10 +52,7 @@ bool operator>=(const account &a, const account &b) {
   return true;
 }
 bool operator==(const account &a, const account &b) {
-  if(strlen(a.id) != strlen(b.id)) {
-    return false;
-  }
-  for(int i = 0;i < strlen(a.id);i++) {
+  for(int i = 0;i < 30;i++) {
     if(a.id[i] != b.id[i]) {
       return false;
     }
