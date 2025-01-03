@@ -287,6 +287,17 @@ void BookManager::modify(Scanner &scanner) {
     if(option == "-keyword") {
       line.erase(0,1);
       line.erase(line.length() - 1,1);
+      std::vector<string> new_keyword;
+      string all_keyword = line;
+      while(!line.empty()) {
+        string keyword = get_keyword(line);
+        for(int i = 0;i < new_keyword.size();i++) {
+          if(new_keyword[i] == keyword) {
+            throw 0;
+          }
+        }
+        new_keyword.push_back(keyword);
+      }
       string ISBN_old(cur_select_book());
       ISBN_find(ISBN_old,tmp);
       string old_keyword(tmp.keyword);
@@ -296,13 +307,12 @@ void BookManager::modify(Scanner &scanner) {
         keyword_to_id old(keyword,tmp.id);
         key_word_finder.Delete(old);
       }
-      for(int i = 0;i < line.length();i++) {
-        tmp.keyword[i] = line[i];
+      for(int i = 0;i < new_keyword.size();i++) {
+        keyword_to_id tmp_keyword(new_keyword[i],tmp.id);
+        key_word_finder.insert(tmp_keyword);
       }
-      while(!line.empty()) {
-        string keyword = get_keyword(line);
-        keyword_to_id New(keyword,tmp.id);
-        key_word_finder.insert(New);
+      for(int i = 0;i < all_keyword.length();i++) {
+        tmp.keyword[i] = all_keyword[i];
       }
       book_finder.update(tmp);
       continue;
